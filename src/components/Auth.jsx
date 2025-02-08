@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import {
   loginSuccess,
   loginFailure,
@@ -15,76 +14,42 @@ function Auth() {
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { isAuthenticate, error } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser?.isLoggedIn) {
+    if (storedUser && storedUser.isLoggedIn) {
       dispatch(loginSuccess(storedUser));
-      navigate("/dashboard");
     }
-  }, [dispatch, navigate]);
+  }, [dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    const trimmedUsername = username.trim();
-    const trimmedEmail = email.trim();
-    const trimmedPassword = password.trim();
-  
-    try {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-  
-      if (isLogin) {
-        const existingUser = users.find(
-          (user) =>
-            user.username === trimmedUsername && user.password === trimmedPassword
-        );
-  
-        if (existingUser) {
-          existingUser.isLoggedIn = true;
-          localStorage.setItem("users", JSON.stringify(users));
-          localStorage.setItem("user", JSON.stringify(existingUser));
-          dispatch(loginSuccess(existingUser));
-          navigate("/dashboard");
-        } else {
-          dispatch(loginFailure("Invalid credentials"));
-        }
+
+    if (isLogin) {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      if (
+        storedUser &&
+        storedUser.username === username &&
+        storedUser.password === password
+      ) {
+        storedUser.isLoggedIn = true;
+        localStorage.setItem("user", JSON.stringify(storedUser));
+        dispatch(loginSuccess(storedUser));
       } else {
-        if (!trimmedUsername || !trimmedEmail || trimmedPassword.length < 8) {
-          dispatch(signupFailure("Invalid details"));
-          return;
-        }
-  
-        const userExists = users.some(
-          (user) =>
-            user.username === trimmedUsername || user.email === trimmedEmail
-        );
-  
-        if (userExists) {
-          dispatch(signupFailure("User already exists"));
-        } else {
-          const newUser = {
-            username: trimmedUsername,
-            email: trimmedEmail,
-            password: trimmedPassword,
-            id: Date.now(),
-            isLoggedIn: false,
-          };
-          users.push(newUser);
-          localStorage.setItem("users", JSON.stringify(users));
-          dispatch(signupSuccess(newUser));
-          setIsLogin(true);
-          navigate("/login");
-        }
+        dispatch(loginFailure("Invalid credentials"));
       }
-    } catch (error) {
-      console.error("Error handling localStorage data:", error);
-      dispatch(loginFailure("Something went wrong"));
+    } else {
+      if (username && email && password.length >= 8) {
+        const newUser = { username, email, password, id: Date.now(), isLoggedIn: false };
+        localStorage.setItem("user", JSON.stringify(newUser));
+        dispatch(signupSuccess(newUser));
+        setIsLogin(true); 
+      } else {
+        dispatch(signupFailure("Invalid details"));
+      }
     }
   };
-  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-purple-600">

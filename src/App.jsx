@@ -48,8 +48,7 @@ function App() {
             Logout
           </button>
           </div>
-          
-
+    
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
             {/* Counter Section */}
             <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl transform transition-all duration-300">
@@ -120,8 +119,6 @@ function App() {
               </ul>
             </div>
           </div>
-
-          
         </div>
       )}
     </>
