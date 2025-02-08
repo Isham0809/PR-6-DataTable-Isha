@@ -1,8 +1,26 @@
-# React + Vite
+# Redux Authentication App
+  - Project Overview
+      - This is a React and Redux-based authentication app that manages user authentication with username and password. The app stores user data in localStorage and provides protected routes for authenticated users.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+  - Features
+      - User authentication (Signup & Login)
+      - Protected routes for Counter and Todo pages
+      - State management using Redux (with Redux Toolkit)
+      - Data persistence using localStorage
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  - Usage
+      - Signup
+          - Users can register with an email, username, and password. The registration process stores user data but does not log in the user automatically.
+    
+      - Login
+          - Users log in with their registered username and password. After successful login, they can access protected routes.
+    
+      - Protected Pages
+          - Counter Page: Accessible only after login.
+          - Todo Page: Accessible only after login.
+  
+ - Technologies Used
+     - React
+     - Redux (with reducers, Redux Toolkit)
+     - Vite
+     - localStorage
